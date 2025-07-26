@@ -2,21 +2,21 @@
 function getMeal(type) {
   showLoader();
 
-  var myRequest = new XMLHttpRequest();
-  myRequest.open(
+  var xhttp = new XMLHttpRequest();
+  xhttp.open(
     "GET",
     `https://forkify-api.herokuapp.com/api/v2/recipes?search=${type}`
   );
-  myRequest.send();
+  xhttp.send();
 
-  myRequest.addEventListener("readystatechange", function () {
-    if (myRequest.readyState === 4) {
+  xhttp.addEventListener("readystatechange", function () {
+    if (xhttp.readyState === 4) {
       hideLoader();
 
-      if (myRequest.status === 200) {
-        var data = JSON.parse(myRequest.response).data.recipes;
+      if (xhttp.status === 200) {
+        var data = JSON.parse(xhttp.response).data.recipes;
         display(data);
-      } else if (myRequest.status === 404) {
+      } else if (xhttp.status === 404) {
         document.querySelector(
           "#card-container"
         ).innerHTML = `<p>No meals found for "${type}".</p>`;
