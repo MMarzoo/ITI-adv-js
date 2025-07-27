@@ -1,22 +1,37 @@
+//add buttons to the navbar
+var navbar = document.querySelector(".navbar");
+var cardContainer = document.querySelector("#card-container");
+
+var categories = ["salad", "pasta", "beef", "pizza"];
+categories.forEach((cat) => {
+  var btn = document.createElement("button");
+  btn.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+  btn.setAttribute("data-type", cat);
+  btn.addEventListener("click", () => {
+    getMeal(cat);
+  });
+  navbar.appendChild(btn);
+});
+
 //get meal data from the API and display it on the page
 function getMeal(type) {
   showLoader();
 
-  var xhttp = new XMLHttpRequest();
-  xhttp.open(
+  var myRequest = new XMLHttpRequest();
+  myRequest.open(
     "GET",
     `https://forkify-api.herokuapp.com/api/v2/recipes?search=${type}`
   );
-  xhttp.send();
+  myRequest.send();
 
-  xhttp.addEventListener("readystatechange", function () {
-    if (xhttp.readyState === 4) {
+  myRequest.addEventListener("readystatechange", function () {
+    if (myRequest.readyState === 4) {
       hideLoader();
 
-      if (xhttp.status === 200) {
-        var data = JSON.parse(xhttp.response).data.recipes;
+      if (myRequest.status === 200) {
+        var data = JSON.parse(myRequest.response).data.recipes;
         display(data);
-      } else if (xhttp.status === 404) {
+      } else if (myRequest.status === 404) {
         document.querySelector(
           "#card-container"
         ).innerHTML = `<p>No meals found for "${type}".</p>`;
@@ -43,16 +58,6 @@ function display(list) {
 window.onload = function () {
   getMeal("pasta");
 };
-
-// Add event listeners to buttons in the navbar
-var btns = document.querySelectorAll(".navbar button");
-
-btns.forEach((btn) => {
-  btn.addEventListener("click", function () {
-    var type = btn.getAttribute("data-type");
-    getMeal(type);
-  });
-});
 
 //function to show and hide the loader(spinner)
 function showLoader() {
